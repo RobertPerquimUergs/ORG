@@ -2,7 +2,7 @@
 Projeto e desenvolvimento de um processador Mips
 
 # Caminho de Dados
-    ![image info] (dataforwarding.png)
+    ![image](dataforwarding.png?raw=true "title")
 
 # Instruções com 32 bits
     //Operações dentro do processador: 

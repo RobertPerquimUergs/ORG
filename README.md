@@ -2,7 +2,7 @@
 Projeto e desenvolvimento de um processador Mips
 
 # Caminho de Dados
-    ![image info] https://github.com/michel-uergs/ORG/blob/main/dataforwarding.png
+    ![image info] (dataforwarding.png)
 
 # Instruções com 32 bits
     //Operações dentro do processador: 
@@ -13,3 +13,5 @@ Projeto e desenvolvimento de um processador Mips
     
     //Operações de desvio:
     Tipo J =>   | 6-opcode |               26-destino                      |
+
+# Registradores 

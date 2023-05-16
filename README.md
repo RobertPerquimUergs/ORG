@@ -2,9 +2,11 @@
 Projeto e desenvolvimento de um processador Mips
 
 # Caminho de Dados
-    ![image info] (dataforwarding.png)
+    
+    ![image](dataforwarding.png)
 
 # Instruções com 32 bits
+    
     Operações dentro do processador: 
         Tipo R => | 6-opcode | 5-reg1 | 5-reg2 | 5-reg3 | 5- shampt | 6-func |
     Instruções:

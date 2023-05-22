@@ -109,8 +109,8 @@ architecture rtl of data_path is
   if (ALUSrcB='0') then
     B_operand <= REG_B;
   else
-    B_operand (31 downto 16) <= instruction_register(15 downto 0);
-    B_operand (15 downto  0) <= "0000000000000000";
+    B_operand (15 downto 0) <= instruction_register(15 downto 0);  --mudei a ordem dos bit 
+    B_operand (31 downto 16) <= "0000000000000000";  -- aqui seria o bit de sinal
   end if;
 
   -- MUX C_ADDR 

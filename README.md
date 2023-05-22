@@ -3,15 +3,17 @@ Projeto e desenvolvimento de um processador Mips
 
 ##  Caminho de Dados
     
-![image](dataforwarding.png)
+![image](mWXHWpT(1).png)
 
 ## Instruções com 32 bits
     
 **Instruções:**
-Tipo R => | 6-opcode | 5-reg1 | 5-reg2 | 5-reg3 | 5- shampt    6-func |
-Tipo I => | 6-opcode | 5-reg1 | 5-reg2 |         16dest               |
-Tipo J => | 6-opcode |          26-destino                            |
-
+**Tipo R** 
+| 6-opcode | 5-reg1 | 5-reg2 | 5-reg3 | 5- shampt  |  6-func |
+**Tipo I** 
+| 6-opcode | 5-reg1 | 5-reg2 |         16dest               |
+**Tipo J**  
+| 6-opcode |          26-destino                            |
 
 __Formato__           |    __Resultado__
 ------------------------------------------------------

@@ -14,23 +14,25 @@ entity data_path is
   Port (
     clk                 : in  std_logic;
     rst_n               : in  std_logic;
-    adress_sel          : in  std_logic;
-    jmp_sel             : in  std_logic;
-    alu_mem_sel         : in  std_logic;
-    alu_b_ind           : in  std_logic;
-    pc_en               : in  std_logic;
-    ir_en               : in  std_logic;
-    data_en             : in  std_logic;
-    write_reg_en        : in  std_logic;
-    alu_op              : in  std_logic_vector (5 downto 0);
-    adress_pc           : out std_logic_vector (8 downto 0);
+
+    PCWriteCond         : in  std_logic;
+    IorD                : in  std_logic;
+    PCsource            : in  std_logic;
+    MemRead             : in  std_logic;
+    MemWrite            : in  std_logic;
+    MentoReg            : in  std_logic;
+    IRWrite             : in  std_logic;
+    RegDst              : in  std_logic;
+    RegWrite            : in  std_logic;
+    ALUSrcA             : in  std_logic;
+    ALUSrcB             : in  std_logic;
+    ALUop               : in  std_logic_vector (5 downto 0);
+    Address              : out std_logic_vector (8 downto 0);
     decoded_inst        : out decoded_instruction_type;
     
-    flag_z              : out std_logic;
-    flag_n              : out std_logic;
+    zero                : out std_logic;
+    neg                 : out std_logic;
     
-    mem_write_sel       : in  std_logic;
-    alu_a_ind           : in  std_logic;
     saida_memoria       : in  std_logic_vector (31 downto 0);       -- memory to instruction register and/or data register
     entrada_memoria     : out std_logic_vector (31 downto 0)        -- ula_out or reg_out to memory
   );
@@ -47,9 +49,9 @@ architecture rtl of data_path is
   signal REG_B                    : std_logic_vector (31 downto 0); 
 
   -- ENDERECO DOS REGISTRADORES
-  signal a_addr                   : std_logic;                        -- endereco registrador a
-  signal b_addr                   : std_logic;                        -- endereco registrador b
-  signal c_addr                   : std_logic;                        -- endereco registrador c
+  signal a_addr                   : std_logic_vector(4 downto 0);     -- endereco registrador a
+  signal b_addr                   : std_logic_vector(4 downto 0);     -- endereco registrador b
+  signal c_addr                   : std_logic_vector(4 downto 0);     -- endereco registrador c
 
   -- OPERADORES DA ALU
   signal A_operand                : std_logic_vector (31 downto 0);
@@ -97,28 +99,43 @@ architecture rtl of data_path is
   begin
   
   -- MUX ALU-A
-  if (alu_a_ind = '0') then
+  if (ALUSrcA='1') then
     A_operand <= REG_A;
   else
     A_operand <= program_counter;
   end if;
   
   -- MUX ALU-B
-  if (alu_b_ind = '0') then
+  if (ALUSrcB='0') then
     B_operand <= REG_B;
   else
     B_operand (31 downto 16) <= instruction_register(15 downto 0);
     B_operand (15 downto  0) <= "0000000000000000";
   end if;
 
-
-  -- MUX REG
-  if (write_reg_en) then
+  -- MUX C_ADDR 
+  if (RegDst='0') then
     c_addr <= b_addr;
   else
-    c_addr <= instruction_register(15 downto 0);
+    c_addr <= instruction_register(15 downto 11);
   end if;
-    
+
+  -- MUX WRITE_DATA
+  if (MentoReg='0') then
+    write_data <= ALUout;
+  else
+    write_data <= memory_data_register;
+  end if;
+  
+  -- MUX PC
+  if (IorD ='0') then
+    Address <= program_counter;
+  else
+    Address <= ALUout;
+  end if;
+
+  -- DECODER
+
   -- Banco de registradores
   process(clk)
   begin
@@ -192,7 +209,7 @@ architecture rtl of data_path is
       when "11111" =>   REG_B <= reg31;
     end case;
 
-    if (write_reg_en) then
+    if (RegWrite) then
       case (c_addr) is
         when "00000" =>   reg0  <= write_data;
         when "00001" =>   reg1  <= write_data;
